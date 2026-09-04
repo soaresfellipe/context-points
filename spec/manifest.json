@@ -1,0 +1,36 @@
+{
+  "name": "context-points",
+  "displayName": "Context Points",
+  "version": "0.1.0",
+  "description": "Scrum adapted for teams made of agents: story points become a context budget, planning poker runs blind to detect ambiguity, and the Definition of Done is a list of commands.",
+  "author": {
+    "name": "Fellipe Soares",
+    "url": "https://github.com/soaresfellipe"
+  },
+  "homepage": "https://github.com/soaresfellipe/context-points",
+  "repository": "https://github.com/soaresfellipe/context-points",
+  "license": "MIT",
+  "keywords": [
+    "scrum",
+    "agile",
+    "agents",
+    "multi-agent",
+    "orchestration",
+    "methodology",
+    "estimation",
+    "context-engineering"
+  ],
+  "source": "./adapters/claude-code/plugins/context-points",
+  "skills": [
+    {
+      "name": "context-points",
+      "source": "SPEC.md",
+      "description": "The Context Points methodology: Scrum adapted for agent teams, where the scarce resource is context rather than time. Use when planning, estimating, refining, reviewing or retrospecting work executed by AI agents; when deciding how to split work across subagents; or when someone asks how to run a sprint, a backlog or a Definition of Done for a team of agents."
+    },
+    {
+      "name": "context-points-estimation",
+      "source": "estimation.md",
+      "description": "The context-point scale and the blind estimation protocol. Use when sizing a story for an agent, deciding whether work fits in one session, choosing between a story and a spike, or running planning poker across isolated agent contexts."
+    }
+  ]
+}

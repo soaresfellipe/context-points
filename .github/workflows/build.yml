@@ -1,0 +1,66 @@
+name: build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  generated-tree-is-current:
+    name: adapters/ matches spec/
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Regenerate from spec/
+        run: python3 tools/build.py
+
+      - name: Fail if the generated tree changed
+        run: |
+          if ! git diff --quiet -- adapters .claude-plugin; then
+            echo "::error::Generated files are out of date or were edited by hand."
+            echo "Edit spec/, then run: python3 tools/build.py"
+            echo
+            git --no-pager diff -- adapters .claude-plugin
+            exit 1
+          fi
+          echo "Generated tree matches spec/."
+
+  structure:
+    name: required paths and valid JSON
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fixed paths required by Claude Code
+        run: |
+          set -e
+          plugin=adapters/claude-code/plugins/context-points
+          test -f .claude-plugin/marketplace.json
+          test -f "$plugin/.claude-plugin/plugin.json"
+          # Skills must be a directory containing SKILL.md, never a loose .md.
+          for dir in "$plugin"/skills/*/; do
+            test -f "${dir}SKILL.md" || { echo "missing ${dir}SKILL.md"; exit 1; }
+          done
+          echo "Required paths present."
+
+      - name: JSON is parseable
+        run: |
+          for f in $(git ls-files '*.json'); do
+            python3 -c "import json,sys; json.load(open(sys.argv[1]))" "$f"
+          done
+          echo "All JSON files parse."
+
+      - name: Plugin references nothing outside its own folder
+        run: |
+          plugin=adapters/claude-code/plugins/context-points
+          if grep -rn '\.\./' "$plugin" --include='*.md' --include='*.json'; then
+            echo "::error::A plugin is copied into a cache on install, so a path"
+            echo "leaving its folder resolves to nothing on the user's machine."
+            exit 1
+          fi
+          echo "No references escape the plugin folder."

@@ -1,0 +1,70 @@
+# The context-point scale
+
+A context point is a **budget**, not a forecast. The scale answers one question:
+
+> Does this fit in one session without the agent losing the thread?
+
+| Points | Meaning |
+|---|---|
+| **1** | One file. The test already exists. No design decision. |
+| **2** | A few files. The input/output contract is already defined. |
+| **3** | Crosses layers — API plus domain plus persistence. |
+| **5** | Requires a design decision, or changes a contract between modules. |
+| **8** | Does not fit in one session. Splitting is mandatory. |
+
+**8 is not a size. It is a rejection.** An 8 means the story was never
+estimated — it was refused. Split it and estimate the pieces.
+
+There is deliberately no 13, no 20, and no ½. A finer scale invites debate
+about numbers, and the numbers are not the point.
+
+## The second dimension: verifiability
+
+Size and verifiability are independent. A 1-point story can be unverifiable,
+and a 5-point story can be perfectly verifiable.
+
+Ask: **can "done" be proven with a command?**
+
+- **Yes** → it is a story. Record the command as an acceptance criterion.
+- **No** → it is a **spike**. A spike is not sized on this scale and produces
+  no increment. Its only deliverable is the set of criteria that make the real
+  story verifiable.
+
+"Improve error handling" is a spike wearing a story's clothes. "`pytest
+tests/test_errors.py::test_timeout_returns_504` passes" is a story.
+
+## Blind estimation protocol
+
+The point of the ritual is detecting ambiguity, not producing a number.
+
+1. The Product Owner, the Dev Senior and QA each estimate the same story.
+2. Each runs in a **clean context**. None of them sees another's answer, and
+   none of them sees another's reasoning.
+3. Compare:
+
+| Spread | Meaning | Action |
+|---|---|---|
+| All three agree | The story is understood | Ready |
+| One step apart | Normal noise | Take the highest, proceed |
+| More than one step | **The spec is ambiguous** | Back to refinement |
+
+Never average. An average hides the disagreement, and the disagreement was the
+only signal the exercise produced.
+
+If the three roles run in the same session, they will converge by anchoring on
+whoever answered first. The estimate then looks like consensus and contains no
+information. **Isolation is not an optimisation here — it is the mechanism.**
+
+## Calibration
+
+The table above is calibrated against a Python and TypeScript codebase of
+moderate size, with fast tests and a working linter. It will drift on stacks
+that differ, notably:
+
+- languages with slow or flaky test suites, where a 2 behaves like a 5
+- monorepos where "one file" pulls in generated code
+- codebases without tests, where nearly everything is a spike
+
+Calibration data from other stacks is the single most useful contribution this
+project can receive. If the scale is wrong for yours, open a PR describing the
+story, the points you assigned, and what actually happened.
