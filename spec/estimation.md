@@ -18,6 +18,42 @@ estimated — it was refused. Split it and estimate the pieces.
 There is deliberately no 13, no 20, and no ½. A finer scale invites debate
 about numbers, and the numbers are not the point.
 
+## The exception: an invariant is not split by its surface
+
+Splitting is mandatory at 8, with one case where the rule inverts.
+
+A story can carry **one invariant across several surfaces** — the same
+guarantee restated on two screens and two platforms, on three endpoints, in a
+web and a mobile client. Splitting it by surface looks like the obvious move
+and is the wrong one. Each piece still needs the whole invariant in context to
+be written correctly, so the split reduces no context. What it reduces is the
+chance the last surface is ever done, and it hides the failure: every piece
+passes its own acceptance criteria while the guarantee is false on the surface
+nobody named.
+
+**Split by state, never by surface.** If the pieces would each restate the same
+invariant, it is one story. The points then describe the number of reachable
+**states**, and the acceptance criteria enumerate the states rather than the
+screens — every state, on every surface, in one list.
+
+An 8 that cannot be split this way is a signal that the invariant itself is too
+broad, not that the story is too big. Narrow the guarantee, not the surface.
+
+### Observed
+
+A story fixed a display-versus-persistence invariant on the path the story
+named. It passed. The same invariant was found alive on the neighbouring path
+in the next verification pass, then a third time in a field nobody had named.
+Re-work reached roughly two thirds of that story's total cost, and the cause
+was not difficulty — the final fix was a boolean clause. The follow-up story
+kept all four surfaces together and listed eight states as acceptance criteria.
+It was verified in one pass, with the two defects that came back sitting in
+neither the invariant nor the states, but in data availability and a missing
+CSS rule.
+
+The generalisation worth testing elsewhere: **re-work is the cost of splitting
+on the wrong axis, and it does not appear in the estimate of either piece.**
+
 ## The second dimension: verifiability
 
 Size and verifiability are independent. A 1-point story can be unverifiable,
@@ -54,6 +90,39 @@ only signal the exercise produced.
 If the three roles run in the same session, they will converge by anchoring on
 whoever answered first. The estimate then looks like consensus and contains no
 information. **Isolation is not an optimisation here — it is the mechanism.**
+
+## When the blind protocol costs more than the story
+
+Three isolated estimators cost three sessions. That is cheap against a story
+that turns out ambiguous and expensive against one that does not.
+
+Measured on one team-day, session cost clustered by role rather than by story
+size: design and verification sessions were the most expensive, implementation
+sessions roughly half of those, and a **single refinement pass by the backlog
+owner cost about as much as implementing a small story**. Estimating a 1 or a 2
+blind can therefore cost more than simply building it and correcting the
+estimate afterwards.
+
+A floor keeps the ritual where it pays:
+
+- **Crosses a layer, changes a contract, or the writer's own estimate is 3 or
+  more** → estimate blind, three roles, isolated.
+- **Below that** → one estimate, recorded, corrected in the retrospective.
+
+The floor is a guess and is exactly the kind of number this project wants
+counter-examples for.
+
+### Mark an estimate that was not blind
+
+An estimate produced in the same session that refined the story is not blind,
+whatever the protocol says — the estimator has already seen the work. This
+happens legitimately: a story gets refined and sized in one pass because
+splitting the pass would cost another session.
+
+**Record it as non-blind on the story.** It stays useful as calibration for its
+class of work and must not be counted as a hit or a miss when the scale is
+reviewed. An unmarked non-blind estimate that lands exactly on target is worse
+than a miss: it is evidence of nothing, presented as the scale working.
 
 ## Calibration
 
