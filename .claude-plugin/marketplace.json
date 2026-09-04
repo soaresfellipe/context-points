@@ -6,14 +6,14 @@
   },
   "metadata": {
     "description": "Scrum adapted for teams made of agents: story points become a context budget, planning poker runs blind to detect ambiguity, and the Definition of Done is a list of commands.",
-    "version": "0.1.0"
+    "version": "0.1.1"
   },
   "plugins": [
     {
       "name": "context-points",
       "source": "./adapters/claude-code/plugins/context-points",
       "description": "Scrum adapted for teams made of agents: story points become a context budget, planning poker runs blind to detect ambiguity, and the Definition of Done is a list of commands.",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "author": {
         "name": "Fellipe Soares",
         "url": "https://github.com/soaresfellipe"
